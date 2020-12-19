@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+
+	<link rel="stylesheet" href="./furniturecart/css/all.css">
+	<!-- Theme css -->
+	<link rel="stylesheet" type="text/css" href="./furniturecart/css/furCart.css" media="screen" id="color">
+	<style>
+		.fur-filter_box {
+			margin-right: 10px;
+		}
+
+		.m-fur_multiselect {
+			position: relative;
+		}
+
+		.m-fur_multiselect:hover {
+			cursor: pointer;
+		}
+
+		.selectBox {
+			position: relative;
+		}
+
+		.selectBox select {
+			width: 150px;
+			font-weight: bold;
+			display: block;
+			padding: 0.375rem 0.75rem;
+			font-size: 1rem;
+			line-height: 1.5;
+			color: #495057;
+			background-color: #fff;
+			background-clip: padding-box;
+			border: 1px solid #ced4da;
+			border-radius: 0.25rem;
+			transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		}
+
+		.overSelect {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
+
+		.fur-checkboxes {
+			display: none;
+			border: 1px #dadada solid;
+			position: absolute;
+			width: 100%;
+			left: 0;
+			top: 35px;
+			z-index: 1000;
+			background: white;
+			padding: 10px 3px;
+			max-height: 350px;
+			overflow-y: auto;
+			border-radius: 8px;
+		}
+
+		.fur-checkboxes::-webkit-scrollbar {
+			width: 0.8rem;
+		}
+
+		.fur-checkboxes::-webkit-scrollbar-corner {
+			width: 1em;
+		}
+
+		.fur-checkboxes::-webkit-scrollbar-track {
+			box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		}
+
+		.fur-checkboxes::-webkit-scrollbar-thumb {
+
+			background-color: #81a6fb;
+			outline: 1px solid #efefef;
+			border-radius: 10px;
+
+		}
+
+		.m-fur_multiselect:hover .fur-checkboxes {
+			/* .m-fur_multiselect:hover .fur-checkboxes .active{ */
+			display: block;
+			animation: zoomIn .4s;
+		}
+
+		.fur-checkboxes label {
+			position: relative;
+			display: block;
+			background: white;
+			padding: 3px 0;
+		}
+
+		.fur-checkboxes label input {
+			margin-right: 10px;
+		}
+
+		.fur-checkboxes label:hover {
+			cursor: pointer;
+
+		}
+
+		.fur-checkboxes.img {
+			flex-wrap: wrap;
+		}
+
+		.m-fur_multiselect:hover .fur-checkboxes.img {
+			display: flex;
+		}
+
+		.m-fur_select-list {
+			width: 100%;
+		}
+
+		.m-fur_select-list.active {
+			width: 100%;
+		}
+
+		.fur-checkboxes.img .m-fur_select-list {
+			border: 1px solid #ccc;
+			background: white;
+
+		}
+
+		.fur-checkboxes.img .m-fur_select-list:hover,
+		.fur-checkboxes.img .m-fur_select-list.active {
+			border: 1px solid black;
+			color: #000;
+		}
+
+		.fur-checkboxes.img .m-fur_select-list {
+			width: 30%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			padding: 0 0 5px;
+			border: 1px solid #c3c3c3;
+			border-radius: 5px;
+			margin: 3px 5px;
+			font-size: 0.8rem;
+			color: #000;
+			overflow: hidden;
+		}
+
+		.fur-checkboxes.checkbox .m-fur_select-list {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 10px 8px;
+			border-bottom: 1px solid #c3c3c3;
+			margin: 5px 0;
+			font-size: 0.8rem;
+			color: #000;
+			overflow: hidden;
+		}
+
+
+		.m-fur_select-list .m-fur_list-img {
+			width: 100%;
+			/* width: 90.328px; */
+			height: 67.734px;
+			margin-bottom: 3px;
+		}
+
+		.fur-filter_bar {
+			margin: 8px 0 10px;
+			padding: 5px 0;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+
+		}
+
+		.fur-filter_bar-i {
+			position: relative;
+			padding: 6px 10px 6px 8px;
+			background: white;
+			color: #847c76;
+			font-size: 15px;
+			margin-right: 5px;
+			margin-top: 10px;
+			border: 1px solid #c3c3c3;
+			border-radius: 15px;
+		}
+
+		.fur-filter_bar-i:after {
+			content: '\f00d';
+			font-family: 'Fontawesome';
+			right: 0;
+			top: -2px;
+			font-size: 10px;
+			position: relative;
+		}
+
+		/* @-webkit-keyframes zoomIn {
+		from {
+			opacity: 0;
+			-webkit-transform: scale3d(0.3, 0.3, 0.3);
+			transform: scale3d(0.3, 0.3, 0.3);
+		}
+
+		50% {
+			opacity: 1;
+		}
+	} */
+		@keyframes zoomIn {
+			from {
+				top: 0;
+				opacity: 0;
+				-webkit-transform: scale3d(0.3, 0.3, 0.3);
+				transform: scale3d(0.3, 0.3, 0.3);
+			}
+
+			50% {
+				top: 43px;
+				opacity: 1;
+			}
+		}
+
+
+		.fur-box_items .fur-box_item label input[name="radio"] {
+			display: none;
+		}
+
+		.fur-checkbox_container {
+			display: flex;
+			width: 100%;
+			position: relative;
+			padding-left: 35px;
+			cursor: pointer;
+			font-size: 22px;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		/* Hide the browser's default radio button */
+		.fur-checkbox_container input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		/* Create a custom radio button */
+		.fur-checkbox_checkmark {
+			position: absolute;
+			top: 8px;
+			left: 0;
+			height: 25px;
+			width: 25px;
+			background-color: #eee;
+		}
+
+
+		/* On mouse-over, add a grey background color */
+		.fur-checkbox_container:hover input~.fur-checkbox_checkmark {
+			background-color: #ccc;
+		}
+
+		/* When the radio button is checked, add a blue background */
+		.fur-checkbox_container input:checked~.fur-checkbox_checkmark {
+			background-color: #2196F3;
+		}
+
+		/* Create the indicator (the dot/circle - hidden when not checked) */
+		.fur-checkbox_checkmark:after {
+			content: "\f00c";
+			font-family: "Fontawesome";
+			position: absolute;
+			display: none;
+		}
+
+		/* Show the indicator (dot/circle) when checked */
+		.fur-checkbox_container input:checked~.fur-checkbox_checkmark:after {
+			display: block;
+		}
+
+		/* Style the indicator (dot/circle) */
+		.fur-checkbox_container .fur-checkbox_checkmark:after {
+			top: 17%;
+			left: 24%;
+			font-size: 12px;
+			height: 8px;
+			border-radius: 50%;
+			color: white;
+			background: transparent;
+		}
+
+		.fur-checkbox_container .fur-checkbox-label {
+			margin-left: 31px;
+			font-size: 0.9rem;
+		}
+
+		.fur-box_type {
+			margin: 0.5rem 1rem;
+		}
+
+		.fur-box_title {
+			font-size: 1rem;
+			color: #6b6b6b;
+			text-transform: capitalize;
+		}
+
+		.fur-box_type.checkbox .fur-box_items {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.m-fur_multiselect .fur-checkboxes .fur-box_type.checkbox .fur-box_items {}
+
+		.fur-box_type.checkbox .fur-box_items .fur-box_item:not(:first-child) {
+			border-top: 1px dashed #c3c3c3;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item {
+			position: relative;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item label input[name="radio"]~.fur-checkbox-label {
+			margin-right: 15px;
+			width: 100%;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item label input[name="radio"]:checked~.checkmark:after {
+			width: 5px;
+			height: 10px;
+			content: "\f058";
+			color: #00294a;
+			font-size: 19px;
+			right: 10px;
+			position: absolute;
+			top: -14px;
+			font-family: "Fontawesome";
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item:hover {
+			border-color: #2196F3;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item:has(label>input[name="radio"]:checked) {
+			border-color: #2196F3;
+		}
+
+		.fur-box_type.imageBox .fur-box_items {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item {
+			width: 29%;
+			margin: 0 10px 10px 0;
+			padding: 0;
+			padding-bottom: 0;
+			border: 2px solid #c3c3c3;
+			border-radius: 5px;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item label {
+			margin: 0;
+			background: transparent;
+			width: 100%;
+			padding: 0;
+			margin-bottom: 5px;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item .fur-checkbox-label {
+			text-align: center;
+			font-size: 0.9rem;
+		}
+
+		.fur-box_type.imageBox .fur-box_items .fur-box_item .fur-box_item-img {
+			height: 45px;
+			max-width: 100%;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items {
+			display: flex;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item {
+			max-width: 45%;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item .fur-minmaxBox_container {
+			width: 100%;
+			padding: 12px 20px 3px 8px;
+			border: 2px solid #c3c3c3;
+			position: relative;
+			border-radius: 5px;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item:first-child {
+			margin-right: 15px;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item .fur-minmaxBox_container .fur-minmaxBox-i {
+			width: 100%;
+			border: none;
+			margin: 22px 20px 0 0;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item .fur-minmaxBox_container .fur-minmaxBox-i:focus {
+			border: none;
+			outline: none;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item .fur-minmaxBox_container .fur-minmaxBox-label {
+			position: absolute;
+			top: 5px;
+			font-size: 0.9rem;
+			color: #9a9696;
+			font-weight: 550;
+		}
+
+		.fur-box_type.minmaxBox .fur-box_items .fur-box_item .fur-minmaxBox_container .fur-minmaxBox-m {
+			position: absolute;
+			right: 5px;
+			bottom: 5px;
+			font-size: 0.9rem;
+			color: #9a9696;
+			font-weight: 550;
+		}
+
+		.fur-s-f_modal .fur-checkbox_container {
+			margin: 10px 0;
+		}
+
+		.fur-s-f_modal .fur-checkbox_checkmark {
+			position: absolute;
+			top: 1px;
+			left: 0;
+			height: 24px;
+			width: 27px;
+		}
+
+
+
+		*/:root {
+			--card-padding: 24px;
+			--card-height: 100%;
+			--card-skeleton: linear-gradient(lightgrey var(--card-height), transparent 0);
+			--avatar-size: 32px;
+			--avatar-position: var(--card-padding) var(--card-padding);
+			--avatar-skeleton: radial-gradient(circle 16px at center, white 99%, transparent 0);
+			--title-height: 10px;
+			--title-width: 200px;
+			--title-position: var(--card-padding) 180px;
+			--title-skeleton: linear-gradient(white var(--title-height), transparent 0);
+			--desc-line-height: 16px;
+			--desc-line-skeleton: linear-gradient(white var(--desc-line-height), transparent 0);
+			--desc-line-1-width: 230px;
+			--desc-line-1-position: var(--card-padding) 242px;
+			--desc-line-2-width: 180px;
+			--desc-line-2-position: var(--card-padding) 265px;
+			--footer-height: 40px;
+			--footer-position: 0 calc(var(--card-height) - var(--footer-height));
+			--footer-skeleton: linear-gradient(white var(--footer-height), transparent 0);
+			--blur-width: 200px;
+			--blur-size: var(--blur-width) calc(var(--card-height) - var(--footer-height));
+		}
+
+		/*
+		* Card Skeleton for Loading
+		*/
+
+		/*
+ * Variables
+ */
+		:root {
+			--card-padding: 24px;
+			--card-height: 416px;
+			--card-skeleton: linear-gradient(white var(--card-height), transparent 0);
+			--avatar-size: 100%;
+			--avatar-position: left bottom;
+			--avatar-skeleton: radial-gradient(#ffffff, #ffffff);
+			--title-height: 27px;
+			--title-width: 200px;
+			--title-position: center bottom;
+			--title-skeleton: linear-gradient(white var(--title-height), transparent 0);
+			--desc-line-height: 16px;
+			--desc-line-skeleton: linear-gradient(white var(--desc-line-height), transparent 0);
+			--desc-line-1-width: 230px;
+			--desc-line-1-position: var(--card-padding) 163px;
+			--desc-line-2-width: 130px;
+			--desc-line-2-position: var(--card-padding) 229px;
+			--footer-height: 0px;
+			--footer-position: 0 calc(var(--card-height) - var(--footer-height));
+			--footer-skeleton: linear-gradient(white var(--footer-height), transparent 0);
+			--blur-width: 200px;
+			--blur-size: var(--blur-width) calc(var(--card-height) - var(--footer-height));
+		}
+
+		/*
+ * Card Skeleton for Loading
+ */
+		.skeleton-card.card {
+			width: 100%;
+			height: var(--card-height);
+			margin-top: 50px;
+			border: none;
+		}
+
+		.skeleton-card.card:empty::after {
+			content: "";
+			display: block;
+			width: 100%;
+			height: 100%;
+			border-radius: 6px;
+			box-shadow: 0 10px 45px rgba(0, 0, 0, 0.1);
+			background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(211, 211, 211, 0)), color-stop(50%, rgba(211, 211, 211, 0.8)), to(rgba(211, 211, 211, 0))), var(--title-skeleton), var(--desc-line-skeleton), var(--desc-line-skeleton), var(--avatar-skeleton), var(--footer-skeleton), var(--card-skeleton);
+			background-image: linear-gradient(90deg, rgba(211, 211, 211, 0) 0, rgb(236 236 236 / 48%) 50%, rgba(211, 211, 211, 0) 100%), var(--title-skeleton), var(--desc-line-skeleton), var(--desc-line-skeleton), var(--avatar-skeleton), var(--footer-skeleton), var(--card-skeleton);
+			background-size: var(--blur-size), var(--title-width) var(--title-height), var(--desc-line-1-width) var(--desc-line-height), var(--desc-line-2-width) var(--desc-line-height), var(--avatar-size) var(--avatar-size), 100% var(--footer-height), 100% 100%;
+			background-position: -150% 0, var(--title-position), var(--desc-line-1-position), var(--desc-line-2-position), var(--avatar-position), var(--footer-position), 0 0;
+			background-repeat: no-repeat;
+			-webkit-animation: loading 1.5s infinite;
+			animation: loading 1.5s infinite;
+		}
+
+		@-webkit-keyframes loading {
+			to {
+				background-position: 350% 0, var(--title-position), var(--desc-line-1-position), var(--desc-line-2-position), var(--avatar-position), var(--footer-position), 0 0;
+			}
+		}
+
+		@keyframes loading {
+			to {
+				background-position: 350% 0, var(--title-position), var(--desc-line-1-position), var(--desc-line-2-position), var(--avatar-position), var(--footer-position), 0 0;
+			}
+		}
+	</style>
+	<style>
+		.product-box .img-wrapper,
+		.product-wrap .img-wrapper {
+			min-height: 200px;
+		}
+	</style>
+	<link rel="stylesheet" href="./dist/app.css">
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+</head>
+<body>
+	
+	<div class="cart-el py-5 my-5 text-center"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="d-flex flex-wrap">
+					<div class="dFilter mr-3 mt-2"></div>
+					<div class="cFilter  mr-3  mt-2"></div>
+					<div class="mFilter  mr-3  mt-2"></div>
+					<div class="ppFilter  mr-3  mt-2"></div>
+					<div class="sortFilter mr-3  mt-2"></div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="llFilter">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contianer">
+		<div class="col-md-12">
+			<div class="productsList"></div>
+		</div>
+	</div> 
+	<div class="details"></div>
+	
+	
+	<script src="./furniturecart/js/all.js">
+	</script>
+	<script src="../furniturecart/js/babel.js"></script>
+	</script>
+	<script type="text/javascript" src="./dist/app.js"></script>
+</body>
+
+</html>
